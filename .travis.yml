@@ -1,12 +1,18 @@
 language: ruby
 cache:
   - bundler
+before_install:
+- "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give Web server some time to bind to sockets, etc
   - bundle exec rake db:create
   - bundle exec rake db:migrate
   - bundle exec rake assets:precompile
 script:
   - bundle exec rake test
+  - bundle exec rspec
 deploy:
   provider: heroku
   api_key:
@@ -17,3 +23,5 @@ deploy:
 env:
   global:
     secure: RRE0apZNlZ8BaoJRK4p7IF0904AbThUnlyV52fgg4C8u8QQkZ3d6JhtQzystctqgZUmGgRPx15BQrqSArYDL7YPC0rsUzsmqt7KWiBeE1LOUjJJmEEigryVMF6X1awAI4u7N0H01Rkt6sm1u53azYcCeFiI2EZC7paSRNdLMeZEm6G5ypg7O+2AG9o8DmYIU/DBXFUGJy1gOskXhdENq0mEzYrxlyVHdBwKepHkFDiDEyrAzJSKDxSNo8OfEtko3eYc2yr/kFnhQtyLa1ynbkawqSp1DhFZt+xCNaAe2EFKKJYcHhJTSiWOWqPKEqkL6MFbWBFRbydlCZpolPIYzfiHn++3/HIFSKKZQsW6APA7BoXfwe250Y12OLEx+rm5bh48Q0VR3Dqa6QqUJ8UkLRChXrr/L+vNWFTVnT9oK29CujMynwu7tJm6He2+4Mj6XwHpDxunSAWavYZ7Es5X3wt6lT5Bo7nrvNpQU6IyRkcjCsYo6LpQjk78A19O+xh+AwGjJP1EKv/xKcHHaAcyRculhpn4UORBFmB/rXgBZgicvKaqFuxNx3JjmuciDLRAqnYbpFokbnnV4cAPHOl7x//Vn7hj+MecGWxCHC2k1HucpcBpJ/Nn2PGyFXqMI6U9NFVKkrIU9QnG0VtVyXnXXJmOL5/MN/uVficLX0+Vw6IM=
+addons:
+  chrome: beta
