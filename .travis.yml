@@ -10,7 +10,7 @@ before_script:
   - bundle exec rake assets:precompile
 script:
   - bundle exec rake test
-  - bundle exec rspec
+  - xvfb-run -e bundle exec rspec
 deploy:
   provider: heroku
   api_key:
