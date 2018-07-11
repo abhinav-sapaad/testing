@@ -16,7 +16,6 @@ RSpec.describe User, type: :model do
       user = User.new(name: 'Abhi', email: '')
       expect(user.save).to eq(false)
     end
-    
 
     it 'ensures user saved successfully' do
       user = User.new(name: 'Abhi', email: 'abhinav@sapaad.com', address: 'my address')
