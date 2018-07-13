@@ -17,7 +17,6 @@ RSpec.feature "Users", type: :feature do
     fill_in "Email", :with => "my@email.com"
     fill_in "Address", :with => "my address"
 
-    click_button "Create User"
     expect(page).to have_text("User was successfully created")
   end
 
